@@ -27,13 +27,24 @@ Template.addProduct.events({
         });
     }
 });
-
-Template.product.events({
+Template.productItems.helpers({
+    "productItems": function(){
+        return Products.find({});
+    }
+});
+Template.productItems.events({
     "click .remove": function(){
         Products.remove(this._id);
     },
     "click .edit": function(){
-        Products.update(this._id,{$set:{edit: !this.edit}});
+        console.log(this);
+        jQuery(".popup").css("display","none");
+        jQuery("#"+this._id).css("display","block");
+        jQuery(".greyout").css("display","block");
+    },
+    "click #editCancel": function(){
+        jQuery(".popup").css("display","none");
+        jQuery(".greyout").css("display","none");
     },
     "submit .editProduct": function(event){
         event.preventDefault();
@@ -50,6 +61,9 @@ Template.product.events({
             }
             product[name] = value;
         });
-        Products.update(this._id, product);
+        Products.update(this._id, product, function(err, resp){
+            jQuery(".popup").css("display","none");
+            jQuery(".greyout").css("display","none");
+        });
     }
 });
