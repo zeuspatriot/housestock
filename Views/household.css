@@ -1,0 +1,9 @@
+/* CSS declarations go here */
+div.grid{
+    float: left;
+    width: 30%;
+    margin: 30px;
+}
+div#left{
+
+}

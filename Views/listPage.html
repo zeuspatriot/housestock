@@ -1,0 +1,77 @@
+<template name="listPage">
+    <!--<h3>Filters:</h3>-->
+    <!--{{>filters}}-->
+
+    <h2>Shopping List</h2>
+    {{>addListItems}}
+
+    <h4>Add new Product if it is not in select above:</h4>
+    {{>addProduct}}
+    <div class="grid">
+        <h3>Current List:</h3>
+        {{>listItems}}
+        <div>Total price = {{total}}</div>
+    </div>
+
+    <div class="grid">
+        <h3>Current Stock:</h3>
+
+            {{#each stockItems}}
+                <div>
+                    <span>
+                        {{#if value.hasWeight}}
+                            {{value.weight}} kg
+                        {{/if}}
+                        {{#unless value.hasWeight}}
+                            {{value.amount}}
+                        {{/unless}}
+                        of {{value.brand}} {{value.name}}{{#if value.units}}, pack of {{value.units}}{{/if}}.
+                    </span>
+                </div>
+            {{/each}}
+    </div>
+
+
+
+</template>
+<template name="addListItems">
+    <select name="product" id="productToAdd">
+        {{#each products}}
+            <option value="{{_id}}" style="{{#unless like}}background-color: crimson{{/unless}}">{{name}}{{#if units}} x{{units}}{{/if}}</option>
+        {{/each}}
+    </select>
+    <ul>
+        <form class="addToList">
+            {{#each currProduct}}
+                {{#if value}}<li name="{{name}}" value="{{value}}">{{name}}: {{value}}</li>{{/if}}
+            {{/each}}
+
+            <input type="number" step="0.001" id="amount" placeholder="How many?" />
+
+            <button type="submit">Add to List</button>
+        </form>
+
+    </ul>
+</template>
+<template name="listItems">
+    {{#each items}}
+        <div>
+            <span id = "{{_id}}">
+                {{value.category}}
+                {{value.name}} {{#if value.units}}, pack of {{value.units}}{{/if}} of {{value.brand}}
+                x
+                {{#if value.hasWeight}}
+                    {{value.weight}} kg
+                {{/if}}
+                {{#unless value.hasWeight}}
+                    {{value.amount}}
+                {{/unless}}
+                .
+            </span>
+            <div>{{#if value.dislikedBrands}}(But not: {{value.dislikedBrands}}){{/if}}</div>
+        </div>
+        <button class="transferToStock" id="{{value._id}}">to stock</button>
+        <button class="remove" id="{{value._id}}">remove</button>
+    {{/each}}
+
+</template>

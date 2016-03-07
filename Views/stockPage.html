@@ -1,0 +1,62 @@
+<template name="stock">
+    <h3>filters:</h3>
+    {{>filters}}
+    <div id="left" class="grid">
+        <h3>So, we have:</h3>
+        <button class="editMode">Edit Mode Toggle</button>
+        {{#each items}}
+            {{#unless editMode}}
+                <div>
+                    <span>
+                        {{#if value.hasWeight}}
+                            {{value.weight}} kg
+                        {{/if}}
+                        {{#unless value.hasWeight}}
+                            {{value.amount}}
+                        {{/unless}}
+                        of {{value.brand}} {{value.name}}{{#if value.units}}, pack of {{value.units}}{{/if}} from {{value.shop}}.
+                        Expire at {{value.expire}}
+                    </span>
+                    <button class="used" id="{{value._id}}">We used it</button>
+                    <button class="expired" id="{{value._id}}">It expired</button>
+                    <button class="remove" id="{{value._id}}">Remove</button>
+                </div>
+            {{/unless}}
+            {{#if editMode}}
+                {{#each rawItems}}
+                    <form class="editProduct">
+                        <input type="text" name="name" placeholder="product name" title="name" value="{{name}}" />
+                        <input type="number" name="pricePerUnit" min="0" step="0.01" title="Price per Unit" placeholder="price per unit" value="{{pricePerUnit}}" />
+                        <input type="text" name="category" placeholder="product Category" title="Category" value="{{category}}" />
+                        <input type="number" name="units" min="0" step="0.001" title="Units" placeholder="units or weight in kilos" value="{{units}}" />
+                        <input type="date" name="expire" title="Expiry Day" value="{{expire}}" />
+                        <input type="text" name="brand" title="Brand" placeholder="product Brand" value="{{brand}}" />
+                        <input type="text" name="shop" title="Shop" placeholder="Shop product bought in" value="{{shop}}" />
+                        <input type="number" name="weight" min="0" step="0.001" title="Weight" placeholder="Weight" value="{{weight}}" />
+                        <label for="like">
+                            <input type="checkbox" name="like" id="like" title="like" checked="{{like}}" />
+                            Like this product?
+                        </label>
+                        <button class="edit" id="{{_id}}" type="submit">Submit change</button>
+                    </form>
+                {{/each}}
+            {{/if}}
+        {{/each}}
+    </div>
+    <div id="mid" class="grid">
+        <h3>We already used:</h3>
+        {{#each usedItems}}
+            <div>
+                <span><strong>{{brand}}'s {{name}} from {{shop}}</strong>, price per unit/kilo = {{pricePerUnit}}, in {{category}} Category, expires in {{expire}} day(s){{#if weight}}, weight is = {{weight}}{{/if}} at <strong>{{usedAtStr}}</strong>.</span>
+            </div>
+        {{/each}}
+    </div>
+    <div id="right" class="grid">
+        <h3>These products expired :(</h3>
+        {{#each expiredItems}}
+            <div>
+                <span><strong>{{brand}}'s {{name}} from {{shop}}</strong>, price per unit/kilo = {{pricePerUnit}}, in {{category}} Category, expires in {{expire}} day(s){{#if weight}}, weight is = {{weight}}{{/if}} at <strong>{{expiredAtStr}}</strong>.</span>
+            </div>
+        {{/each}}
+    </div>
+</template>

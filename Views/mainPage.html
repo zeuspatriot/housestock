@@ -1,0 +1,68 @@
+<template name="main">
+    <h3>Hi there, its a main page</h3>
+
+    <span><a href="/list/">Shopping List</a></span>
+    <span><a href="/stock/">Stock</a></span>
+
+    <div>
+        <h3>Add new product:</h3>
+        {{>addProduct}}
+        <br>
+        {{#each products}}
+            {{>product}}
+        {{/each}}
+    </div>
+
+
+</template>
+<template name="addProduct">
+    <form class="newProduct">
+        <input type="text" name="name" placeholder="product name" />
+        <input type="number" name="pricePerUnit" step="0.01" placeholder="price per unit" />
+        <input type="text" name="category" placeholder="product Category" />
+        <input type="number" name="units" step="0.001" placeholder="units or weight in kilos" />
+        <input type="text" name="brand" placeholder="product Brand" />
+        <input type="text" name="shop" placeholder="Shop product bought in" />
+        <label for="like">
+            <input type="checkbox" name="like" id="like" title="like" checked="true" />
+            Like this product?
+        </label>
+
+        <label for="hasWeight">
+            <input type="checkbox" name="hasWeight" id="hasWeight" title="Weight">
+            Does this a bulk product?
+        </label>
+        <button type="submit">Create product</button>
+    </form>
+</template>
+<template name="product">
+        <div>
+            {{#unless edit}}
+                {{brand}} {{name}} from {{shop}}, price per unit/kilo = {{pricePerUnit}}, in {{category}} Category{{#if weight}}, weight is = {{weight}}{{/if}}.
+                <button class="remove">Remove</button>
+                <button class="edit">Edit</button>
+            {{/unless}}
+            {{#if edit}}
+                <form class="editProduct">
+                    <input type="text" title="Name" name="name" placeholder="product name" value="{{name}}" />
+                    <input type="number" title="Price per Unit" name="pricePerUnit" step="0.01" placeholder="price per unit" value="{{pricePerUnit}}" />
+                    <input type="text" title="Category" name="category" placeholder="product Category" value="{{category}}" />
+                    <input type="number" title="Units" name="units" step="0.001" placeholder="units or weight in kilos" value="{{units}}" />
+                    <input type="text" title="Brand" name="brand" placeholder="product Brand" value="{{brand}}" />
+                    <input type="text" title="Shop" name="shop" placeholder="Shop product bought in" value="{{shop}}" />
+                    <input type="checkbox" name="like"  title="like" checked="{{like}}"/>
+                    <label for="like"> Like this product? </label>
+                    <input type="checkbox" name="hasWeight" title="Weight" checked="{{hasWeight}}">
+                    <label for="hasWeight">Does this a bulk product?</label>
+                    <button class="edit" type="submit">Submit change</button>
+                </form>
+            {{/if}}
+
+        </div>
+
+
+</template>
+<template name="recipes">
+
+</template>
+

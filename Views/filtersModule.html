@@ -1,0 +1,35 @@
+<template name="filters">
+    <div class="filters">
+        <label for="from">from</label>
+        <input type="date" name="boughtAt" title="from" class="filterDateFrom">
+        <label for="to">to</label>
+        <input type="date" name="boughtAt" title="to" class="filterDateTill">
+        <select name="name" id="filterName" title="name">
+            <option value="none">empty</option>
+            {{#each stockNames}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+        <select name="shop" id="filterShop">
+            <option value="none">empty</option>
+            {{#each stockShops}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+        <select name="brand" id="filterBrand">
+            <option value="none">empty</option>
+            {{#each stockBrands}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+        <label for="from">Expire from</label>
+        <input type="date" class="filterExpireFrom" name="expireFrom">
+        <label for="to">till</label>
+        <input type="date" class="filterExpireTo" name="expireTo" >
+        <button id="clearFilters">Clear filters</button>
+    </div>
+    <div>Filters:</div>
+    {{#each filters}}
+        <li>{{name}} : {{value}}</li>
+    {{/each}}
+</template>
