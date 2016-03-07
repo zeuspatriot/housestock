@@ -36,6 +36,7 @@
 </template>
 <template name="addListItems">
     <select name="product" id="productToAdd">
+        <option value="none">empty</option>
         {{#each products}}
             <option value="{{_id}}" style="{{#unless like}}background-color: crimson{{/unless}}">{{name}}{{#if units}} x{{units}}{{/if}}</option>
         {{/each}}
@@ -53,6 +54,7 @@
 
     </ul>
 </template>
+
 <template name="listItems">
     {{#each items}}
         <div>
@@ -72,6 +74,25 @@
         </div>
         <button class="transferToStock" id="{{value._id}}">to stock</button>
         <button class="remove" id="{{value._id}}">remove</button>
+
+        <div class="popup" id="{{value._id}}">
+            <form class="approve">
+                <input type="text" name="name" placeholder="product name" title="name" value="{{value.name}}" />
+                <input type="number" name="pricePerUnit" min="0" step="0.01" title="Price per Unit" placeholder="price per unit" value="{{value.pricePerUnit}}" />
+                <input type="text" name="category" placeholder="product Category" title="Category" value="{{value.category}}" />
+                <input type="number" name="units" min="0" step="0.001" title="Units" placeholder="units or weight in kilos" value="{{value.units}}" />
+                <input type="date" name="expire" title="Expiry Day" value="{{value.expire}}" />
+                <input type="text" name="brand" title="Brand" placeholder="product Brand" value="{{value.brand}}" />
+                <input type="text" name="shop" title="Shop" placeholder="Shop product bought in" value="{{value.shop}}" />
+                {{#if value.weight}}<input type="number" name="weight" min="0" step="0.001" title="Weight" placeholder="Weight" value="{{value.weight}}" />{{/if}}
+                <label for="like">
+                    <input type="checkbox" name="like" id="like" title="like" checked="{{value.like}}" />
+                    Like this product?
+                </label>
+                <button class="approve" type="submit">Submit change</button>
+            </form>
+            <button class="cancel">Cancel</button>
+        </div>
     {{/each}}
 
 </template>

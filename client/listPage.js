@@ -109,11 +109,33 @@ Template.listItems.events({
     "click .remove": function(){
         List.remove(this.value._id);
     },
-    "click .transferToStock": function(){
-        var item = List.findOne(this.value._id);
-        item["boughtAt"] = new Date();
-        Stock.insert(item, function(err, res){
-            List.remove(item._id);
+    "click .transferToStock": function(event){
+        jQuery(event.target).parent().find("div.popup#"+this.value._id).css("display", "block");
+
+    },
+    "submit .approve": function(event){
+        event.preventDefault();
+        var product = {};
+        var id = this.value._id;
+        jQuery(event.target).find('input').each(function(){
+            var field = jQuery(this);
+            var name = field.attr("name");
+            var value = field.val();
+            if (field.attr("type") == "checkbox"){
+                value = field[0].checked;
+            }
+            if (field.attr("type") == "number"){
+                value = value * 1;
+            }
+            product[name] = value;
         });
+        product["_id"] = this.value._id;
+        Stock.insert(product, function(err, res){
+            List.remove(id);
+            jQuery(event.target).parent().css("display","none");
+        });
+    },
+    "click .cancel":function(){
+        jQuery(event.target).parent().css("display","none");
     }
 });

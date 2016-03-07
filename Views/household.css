@@ -4,6 +4,17 @@ div.grid{
     width: 30%;
     margin: 30px;
 }
-div#left{
-
+form.approve input{
+    margin: 2px;
+}
+div.popup{
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    width: 400px;
+    display: none;
+    background-color: whitesmoke;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 10px grey;
+    padding: 20px;
 }
