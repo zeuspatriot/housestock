@@ -24,7 +24,13 @@ Template.addProduct.events({
         });
         Products.insert(product, function(error, results){
             jQuery('.newProduct input').val("");
+            jQuery('.popup').hide();
+            jQuery('.greyout').hide();
         });
+    },
+    "click #addProductCancel": function(){
+        jQuery(".popup").css("display","none");
+        jQuery(".greyout").css("display","none");
     }
 });
 Template.productItems.helpers({

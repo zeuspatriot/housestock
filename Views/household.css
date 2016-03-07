@@ -9,9 +9,13 @@ form.approve input{
 }
 div.popup{
     position: absolute;
-    top: 30%;
-    left: 30%;
-    /*width: 400px;*/
+    z-index: 100500;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 400px;
+    height: 635px;
     display: none;
     /*background-color: whitesmoke;*/
     /*border-radius: 5px 5px 5px 5px;*/
@@ -27,4 +31,14 @@ div.greyout{
     background-color: grey;
     opacity: 0.4;
     display: none;
+    z-index: 100350;
+}
+.floatRight{
+    float: right;
+}
+.total{
+    font-size: 20px;
+}
+.toStock{
+    height: 685px!important;
 }

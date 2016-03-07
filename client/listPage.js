@@ -3,20 +3,25 @@ Template.listPage.helpers({
         return Products.find({},{sort: {like: 1}});
     },
     "stockItems": function(){
-        var items = Stock.find({usedAt:{$exists: false}, expiredAt: {$exists: false}});
+        var listItems = List.find({});
         var result = {};
         var generalWeight = {};
-        items.forEach(function(elem){
-            result[elem.name] = elem;
-            generalWeight[elem.name] ? null : generalWeight[elem.name] = 0;
-            if(elem.hasWeight) generalWeight[elem.name] += elem.weight;
-            var count = Stock.find({name:elem.name, usedAt:{$exists: false}, expiredAt: {$exists: false} }).count();
-            result[elem.name]["amount"] = count;
-            if(elem.hasWeight){
-                result[elem.name]["weight"] = generalWeight[elem.name];
-                result[elem.name]["price"] = elem.pricePerUnit * elem.weight;
-            }
+        listItems.forEach(function(elem){
+            var items = Stock.find({name:elem.name,usedAt:{$exists: false}, expiredAt: {$exists: false} })
+            items.forEach(function(elem){
+                result[elem.name] = elem;
+                generalWeight[elem.name] ? null : generalWeight[elem.name] = 0;
+                if(elem.hasWeight) generalWeight[elem.name] += elem.weight;
+                var count = Stock.find({name:elem.name, usedAt:{$exists: false}, expiredAt: {$exists: false} }).count();
+                result[elem.name]["amount"] = count;
+                if(elem.hasWeight){
+                    result[elem.name]["weight"] = generalWeight[elem.name];
+                    result[elem.name]["price"] = elem.pricePerUnit * elem.weight;
+                }
+            });
         });
+
+        //var items = Stock.find({usedAt:{$exists: false}, expiredAt: {$exists: false}});
         return _.map(result, function(val,key){return {name: key, value: val}});
     },
     "total": function(){
@@ -41,6 +46,10 @@ Template.listPage.events({
             var item = items[item];
 
         }
+    },
+    "click #addProductCancel": function(){
+        jQuery(".popup").css("display","none");
+        jQuery(".greyout").css("display","none");
     }
 });
 Template.addListItems.events({
@@ -63,6 +72,10 @@ Template.addListItems.events({
             List.insert(product, function(error, result){});
         }
         jQuery("input#amount").val("");
+    },
+    "click #addProduct": function(){
+        jQuery(".popup#addProduct").css("display","block");
+        jQuery(".greyout").css("display","block");
     }
 });
 Template.addListItems.helpers({
@@ -73,9 +86,7 @@ Template.addListItems.helpers({
         var currentProduct = Session.get("currProduct")
             ? Session.get("currProduct")
             : Products.findOne(jQuery("#productToAdd").val());
-        delete currentProduct['_id'];
-        return _.map(currentProduct, function(val,key){return {name: key, value: val}});
-        //return currentProduct;
+        return currentProduct;
     }
 });
 Template.listItems.helpers({
@@ -110,8 +121,8 @@ Template.listItems.events({
         List.remove(this.value._id);
     },
     "click .transferToStock": function(event){
-        jQuery(event.target).parent().find("div.popup#"+this.value._id).css("display", "block");
-
+        jQuery(".toStock#"+this.value._id).show();
+        jQuery(".greyout").show();
     },
     "submit .approve": function(event){
         event.preventDefault();
@@ -132,10 +143,12 @@ Template.listItems.events({
         product["_id"] = this.value._id;
         Stock.insert(product, function(err, res){
             List.remove(id);
-            jQuery(event.target).parent().css("display","none");
+            jQuery(".popup").hide();
+            jQuery(".greyout").hide();
         });
     },
-    "click .cancel":function(){
-        jQuery(event.target).parent().css("display","none");
+    "click #toStockCancel":function(){
+        jQuery(".popup").hide();
+        jQuery(".greyout").hide();
     }
 });
