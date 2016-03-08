@@ -35,7 +35,7 @@ Template.addProduct.events({
 });
 Template.productItems.helpers({
     "productItems": function(){
-        return Products.find({});
+        return Products.find({},{sort:{name:1}});
     }
 });
 Template.productItems.events({

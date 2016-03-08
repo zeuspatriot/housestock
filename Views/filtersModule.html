@@ -1,35 +1,69 @@
 <template name="filters">
-    <div class="filters">
-        <label for="from">from</label>
-        <input type="date" name="boughtAt" title="from" class="filterDateFrom">
-        <label for="to">to</label>
-        <input type="date" name="boughtAt" title="to" class="filterDateTill">
-        <select name="name" id="filterName" title="name">
-            <option value="none">empty</option>
-            {{#each stockNames}}
-                <option value="{{this}}">{{this}}</option>
-            {{/each}}
-        </select>
-        <select name="shop" id="filterShop">
-            <option value="none">empty</option>
-            {{#each stockShops}}
-                <option value="{{this}}">{{this}}</option>
-            {{/each}}
-        </select>
-        <select name="brand" id="filterBrand">
-            <option value="none">empty</option>
-            {{#each stockBrands}}
-                <option value="{{this}}">{{this}}</option>
-            {{/each}}
-        </select>
-        <label for="from">Expire from</label>
-        <input type="date" class="filterExpireFrom" name="expireFrom">
-        <label for="to">till</label>
-        <input type="date" class="filterExpireTo" name="expireTo" >
-        <button id="clearFilters">Clear filters</button>
+    <div class="navbar-form navbar-left">
+        <form class="form-group filters">
+            <label for="from">Filters: </label>
+            <input type="date" name="boughtAt" title="from" id="from" class="filterDateFrom form-control">
+            <input type="date" name="boughtAt" title="to" class="filterDateTill form-control">
+            <select name="name" id="filterName" title="name" class="form-control">
+                <option value="none">Name</option>
+                {{#each stockNames}}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+            <select name="shop" id="filterShop" class="form-control" title="Shop">
+                <option value="none">Shop</option>
+                {{#each stockShops}}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+            <select name="brand" id="filterBrand" class="form-control" title="Brand">
+                <option value="none">Brand</option>
+                {{#each stockBrands}}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+            <select name="category" id="filterCategory" class="form-control" title="Category">
+                <option value="none">Category</option>
+                {{#each stockCategories}}
+                    <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+            <input type="date" class="filterExpireFrom form-control" name="expireFrom" title="Epire From">
+            <input type="date" class="filterExpireTo form-control" name="expireTo" title="Expire To" >
+            <button type="reset" class="btn btn-default" id="clearFilters">Reset filters</button>
+        </form>
     </div>
-    <div>Filters:</div>
-    {{#each filters}}
-        <li>{{name}} : {{value}}</li>
-    {{/each}}
+    <!--<div class="filters">-->
+        <!--<label for="from">from</label>-->
+        <!--<input type="date" name="boughtAt" title="from" class="filterDateFrom">-->
+        <!--<label for="to">to</label>-->
+        <!--<input type="date" name="boughtAt" title="to" class="filterDateTill">-->
+        <!--<select name="name" id="filterName" title="name">-->
+            <!--<option value="none">empty</option>-->
+            <!--{{#each stockNames}}-->
+                <!--<option value="{{this}}">{{this}}</option>-->
+            <!--{{/each}}-->
+        <!--</select>-->
+        <!--<select name="shop" id="filterShop">-->
+            <!--<option value="none">empty</option>-->
+            <!--{{#each stockShops}}-->
+                <!--<option value="{{this}}">{{this}}</option>-->
+            <!--{{/each}}-->
+        <!--</select>-->
+        <!--<select name="brand" id="filterBrand">-->
+            <!--<option value="none">empty</option>-->
+            <!--{{#each stockBrands}}-->
+                <!--<option value="{{this}}">{{this}}</option>-->
+            <!--{{/each}}-->
+        <!--</select>-->
+        <!--<label for="from">Expire from</label>-->
+        <!--<input type="date" class="filterExpireFrom" name="expireFrom">-->
+        <!--<label for="to">till</label>-->
+        <!--<input type="date" class="filterExpireTo" name="expireTo" >-->
+        <!--<button id="clearFilters">Clear filters</button>-->
+    <!--</div>-->
+    <!--<div>Filters:</div>-->
+    <!--{{#each filters}}-->
+        <!--<li>{{name}} : {{value}}</li>-->
+    <!--{{/each}}-->
 </template>

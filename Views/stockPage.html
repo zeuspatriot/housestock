@@ -15,67 +15,96 @@
                     <li><a href="/list/">Shopping list<span class="sr-only">(current)</span></a></li>
                     <li class="active"><a href="/stock/">Stock<span class="sr-only">(current)</span></a></li>
                 </ul>
+                {{>filters}}
             </div>
+
+            <!--<div class="collapse navbar-collapse">-->
+            <!--</div>-->
         </div>
     </nav>
-    <h3>filters:</h3>
-    {{>filters}}
-    <div id="left" class="grid">
-        <h3>So, we have:</h3>
-        <button class="editMode">Edit Mode Toggle</button>
-        {{#each items}}
-            {{#unless editMode}}
-                <div>
-                    <span>
-                        {{#if value.hasWeight}}
-                            {{value.weight}} kg
-                        {{/if}}
-                        {{#unless value.hasWeight}}
-                            {{value.amount}}
-                        {{/unless}}
-                        of {{value.brand}} {{value.name}}{{#if value.units}}, pack of {{value.units}}{{/if}} from {{value.shop}}.
-                        Expire at {{value.expire}}
-                    </span>
-                    <button class="used" id="{{value._id}}">We used it</button>
-                    <button class="expired" id="{{value._id}}">It expired</button>
-                    <button class="remove" id="{{value._id}}">Remove</button>
-                </div>
-            {{/unless}}
-            {{#if editMode}}
-                {{#each rawItems}}
-                    <form class="editProduct">
-                        <input type="text" name="name" placeholder="product name" title="name" value="{{name}}" />
-                        <input type="number" name="pricePerUnit" min="0" step="0.01" title="Price per Unit" placeholder="price per unit" value="{{pricePerUnit}}" />
-                        <input type="text" name="category" placeholder="product Category" title="Category" value="{{category}}" />
-                        <input type="number" name="units" min="0" step="0.001" title="Units" placeholder="units or weight in kilos" value="{{units}}" />
-                        <input type="date" name="expire" title="Expiry Day" value="{{expire}}" />
-                        <input type="text" name="brand" title="Brand" placeholder="product Brand" value="{{brand}}" />
-                        <input type="text" name="shop" title="Shop" placeholder="Shop product bought in" value="{{shop}}" />
-                        <input type="number" name="weight" min="0" step="0.001" title="Weight" placeholder="Weight" value="{{weight}}" />
-                        <label for="like">
-                            <input type="checkbox" name="like" id="like" title="like" checked="{{like}}" />
-                            Like this product?
-                        </label>
-                        <button class="edit" id="{{_id}}" type="submit">Submit change</button>
-                    </form>
-                {{/each}}
-            {{/if}}
-        {{/each}}
-    </div>
-    <div id="mid" class="grid">
-        <h3>We already used:</h3>
-        {{#each usedItems}}
-            <div>
-                <span><strong>{{brand}}'s {{name}} from {{shop}}</strong>, price per unit/kilo = {{pricePerUnit}}, in {{category}} Category, expires in {{expire}} day(s){{#if weight}}, weight is = {{weight}}{{/if}} at <strong>{{usedAtStr}}</strong>.</span>
+
+    <div class="container">
+        <div class="row">
+            <h3>filters:</h3>
+            <!--{{>filters}}-->
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <h3>So, we have:</h3>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Name</th>
+                        <th>Brand</th>
+                        <th>Shop</th>
+                        <th>Amount</th>
+                        <th>Paid</th>
+                        <th>Expires at</th>
+                        <th>Controls</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each items}}
+                            <tr>
+                                <td>{{value.category}}</td>
+                                <td>{{value.name}}{{#if value.units}}, {{value.units}}{{/if}}</td>
+                                <td>{{value.brand}}</td>
+                                <td>{{value.shop}}</td>
+                                <td>x {{value.amount}}</td>
+                                <td>{{value.price}} pln</td>
+                                <td>{{value.expire}}</td>
+                                <td>
+                                    <button class="btn btn-default used" title="We Ate it" ><span class="glyphicon glyphicon-ice-lolly-tasted" aria-hidden="true"></span></button>
+                                    <button class="btn btn-default expired" title="It Expired :(" ><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span></button>
+                                    <button class="btn btn-default remove" title="Remove"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                </td>
+                            </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
             </div>
-        {{/each}}
-    </div>
-    <div id="right" class="grid">
-        <h3>These products expired :(</h3>
-        {{#each expiredItems}}
-            <div>
-                <span><strong>{{brand}}'s {{name}} from {{shop}}</strong>, price per unit/kilo = {{pricePerUnit}}, in {{category}} Category, expires in {{expire}} day(s){{#if weight}}, weight is = {{weight}}{{/if}} at <strong>{{expiredAtStr}}</strong>.</span>
+            <div id="mid" class="col-xs-12 col-md-2">
+                <h4>We already used:</h4>
+                <ul class="list-group">
+                    {{#each usedItems}}
+                        <li class="list-group-item">
+                            {{#if hasWeight}}
+                                {{weight}} kg
+                            {{/if}}
+                            {{#unless hasWeight}}
+                                {{amount}}
+                            {{/unless}}
+                            of {{brand}} {{name}}{{#if units}}, pack of {{units}}{{/if}}.
+                            From {{shop}}
+                            Used at {{usedAt}}
+                        </li>
+                    {{/each}}
+                </ul>
+                <!--<div>-->
+                    <!--<span><strong>{{brand}}'s {{name}} from {{shop}}</strong>, price per unit/kilo = {{pricePerUnit}}, in {{category}} Category, expires in {{expire}} day(s){{#if weight}}, weight is = {{weight}}{{/if}} at <strong>{{usedAtStr}}</strong>.</span>-->
+                <!--</div>-->
+
+
             </div>
-        {{/each}}
+            <div id="right" class="col-xs-12 col-md-2">
+                <h4>These products expired :(</h4>
+                <ul class="list-group">
+                    {{#each expiredItems}}
+                        <li class="list-group-item">
+                            {{#if hasWeight}}
+                                {{weight}} kg
+                            {{/if}}
+                            {{#unless hasWeight}}
+                                {{amount}}
+                            {{/unless}}
+                            of {{brand}} {{name}}{{#if units}}, pack of {{units}}{{/if}}.
+                            From {{shop}}
+                            Used at {{expireddAt}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
     </div>
 </template>

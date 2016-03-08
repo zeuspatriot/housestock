@@ -1,11 +1,12 @@
 function getDistinctClasses(collection,key) {
     if(!Session.get("filters")) Session.set("filters",{});
     var filters = Session.get("filters");
+    console.log(filters);
     var data = collection.find(filters).fetch();
+    console.log(data);
     var distinctData = _.uniq(data, false, function(d) {return d[key]});
     return _.pluck(distinctData, key);
 }
-
 Template.filters.helpers({
     "products": function(){
         var filters = Session.get("filters");
@@ -19,6 +20,9 @@ Template.filters.helpers({
     },
     "stockBrands": function(){
         return getDistinctClasses(Stock,"brand");
+    },
+    "stockCategories": function(){
+        return getDistinctClasses(Stock,"category");
     },
     "filters": function(){
         var filters = Session.get("filters");
