@@ -29,12 +29,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <h2>Shopping List:</h2>
                         {{>listItems}}
                         <span class="label label-primary total floatRight">Total price = {{total}}</span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <h2>You already have in stock:</h2>
 
                         <ul class="list-group">
@@ -46,7 +46,7 @@
                                     {{#unless value.hasWeight}}
                                         {{value.amount}}
                                     {{/unless}}
-                                    of {{value.brand}} {{value.name}}{{#if value.units}}, pack of {{value.units}}{{/if}}.
+                                    of {{value.name}}{{#if value.units}}, pack of {{value.units}}{{/if}}.
                                 </li>
                             {{/each}}
                         </ul>
@@ -128,7 +128,7 @@
                 <tr>
                     <td>{{value.category}}</td>
                     <td>{{value.name}}{{#if value.units}}, {{value.units}}{{/if}}</td>
-                    <td>{{value.brand}}</td>
+                    <td>{{value.brand}} {{#if value.dislikedBrands}}(But not {{value.dislikedBrands}}){{/if}}</td>
                     <td>{{value.shop}}</td>
                     <td>{{value.pricePerUnit}}</td>
                     <td>x {{value.amount}}</td>

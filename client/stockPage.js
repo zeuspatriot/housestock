@@ -13,13 +13,16 @@ Template.stock.helpers({
         var items = Stock.find(filter);
         var result = {};
         var generalWeight = {};
+        var generalPrice = {};
         items.forEach(function(elem){
             result[elem.name] = elem;
             generalWeight[elem.name] ? null : generalWeight[elem.name] = 0;
+            generalPrice[elem.name] ? null : generalPrice[elem.name] = 0;
             if(elem.hasWeight) generalWeight[elem.name] += elem.weight;
             var count = Stock.find({name:elem.name, usedAt:{$exists: false}, expiredAt: {$exists: false} }).count();
             result[elem.name]["amount"] = count;
-            result[elem.name]["price"] = elem.pricePerUnit * count;
+            generalPrice[elem.name] += elem.pricePerUnit;
+            result[elem.name]["price"] = generalPrice[elem.name];
             if(elem.hasWeight){
                 result[elem.name]["weight"] = generalWeight[elem.name];
                 result[elem.name]["price"] = elem.pricePerUnit * elem.weight;
@@ -44,10 +47,23 @@ Template.stock.helpers({
         if(Session.get("filters")) filter = Session.get("filters");
         filter["usedAt"]= {$exists: false};
         filter["expiredAt"] = {$exists: false};
-        return Stock.find(filter);
+        return Stock.find(filter,{sort:{pricePerUnit:1}});
     },
     "editMode": function(){
         return Session.get("editMode");
+    },
+    "tab": function(){
+        var tab = {};
+        tab["fullSelected"] = Session.get("tab") == "full";
+        if(Session.get("tab") == "full") {
+            tab['aggr'] = "";
+            tab['full'] = "active"
+        }
+        else {
+            tab['aggr'] = "active";
+            tab['full'] = ""
+        }
+        return tab;
     }
 });
 Template.stock.events({
@@ -59,5 +75,19 @@ Template.stock.events({
     },
     "click .expired": function(event){
         Stock.update(this.value._id, {$set: {expiredAt: new Date().yyyymmdd()}});
+    },
+    "click ul.lists li": function(event){
+        jQuery("ul.lists li").removeClass("active");
+        jQuery(event.target).parent().addClass("active");
+        Session.set("tab",event.target.name);
+    },
+    "click .removeFull": function(){
+        Stock.remove(this._id);
+    },
+    "click .usedFull": function(event){
+        Stock.update(this._id, {$set: {usedAt: new Date().yyyymmdd()}});
+    },
+    "click .expiredFull": function(event){
+        Stock.update(this._id, {$set: {expiredAt: new Date().yyyymmdd()}});
     }
 });

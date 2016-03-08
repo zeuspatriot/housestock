@@ -1,9 +1,7 @@
 function getDistinctClasses(collection,key) {
     if(!Session.get("filters")) Session.set("filters",{});
     var filters = Session.get("filters");
-    console.log(filters);
     var data = collection.find(filters).fetch();
-    console.log(data);
     var distinctData = _.uniq(data, false, function(d) {return d[key]});
     return _.pluck(distinctData, key);
 }
@@ -43,7 +41,8 @@ Template.filters.events({
         var filter = Session.get("filters");
         if(!filter[event.target.name]) filter[event.target.name]= {};
         if(event.target.value){
-            filter[event.target.name]["$gt"]= new Date(event.target.value);
+            //filter[event.target.name]["$gt"]= new Date(event.target.value);
+            filter[event.target.name]["$gt"] = event.target.value;
         }
         else {
             //delete filter[event.target.name]["$gt"];
@@ -55,7 +54,8 @@ Template.filters.events({
         var filter = Session.get("filters");
         if(!filter[event.target.name]) filter[event.target.name]= {};
         if(event.target.value){
-            filter[event.target.name]["$lt"] = new Date(event.target.value);
+            //filter[event.target.name]["$lt"] = new Date(event.target.value);
+            filter[event.target.name]["$lt"] = event.target.value;
         }
         else{
             delete filter[event.target.name]["$lt"];
@@ -64,5 +64,31 @@ Template.filters.events({
     },
     "click #clearFilters": function(){
         Session.set("filters",{});
+    },
+    "change .filters .filterExpireFrom": function(event){
+        if(!Session.get("filters")) Session.set("filters",{});
+        var filter = Session.get("filters");
+        if(!filter[event.target.name]) filter[event.target.name]= {};
+        if(event.target.value){
+            //filter[event.target.name]["$gt"]= new Date(event.target.value);
+            filter[event.target.name]["$gt"] = event.target.value;
+        }
+        else {
+            //delete filter[event.target.name]["$gt"];
+        }
+        Session.set("filters", filter);
+    },
+    "change .filters .filterExpireTo": function(event){
+        if(!Session.get("filters")) Session.set("filters",{});
+        var filter = Session.get("filters");
+        if(!filter[event.target.name]) filter[event.target.name]= {};
+        if(event.target.value){
+            //filter[event.target.name]["$lt"] = new Date(event.target.value);
+            filter[event.target.name]["$lt"] = event.target.value;
+        }
+        else{
+            delete filter[event.target.name]["$lt"];
+        }
+        Session.set("filters", filter);
     }
 });

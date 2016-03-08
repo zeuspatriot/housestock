@@ -95,6 +95,7 @@ Template.listItems.helpers({
         var result = {};
         //console.log(items);
         var generalWeight = {};
+        var generalPrice = {};
         items.forEach(function(elem){
             var disliked = Products.find({name: elem.name, like:false},{brand:1});
             var dislikedBrands = [];
@@ -104,10 +105,12 @@ Template.listItems.helpers({
             result[elem.name] = elem;
             result[elem.name]["dislikedBrands"] = dislikedBrands;
             generalWeight[elem.name] ? null : generalWeight[elem.name] = 0;
+            generalPrice[elem.name] ? null : generalPrice[elem.name] = 0;
             if(elem.hasWeight) generalWeight[elem.name] += elem.weight;
+            generalPrice[elem.name] += elem.pricePerUnit
             var count = List.find({name:elem.name}).count();
             result[elem.name]["amount"] = count;
-            result[elem.name]["price"] = (elem.pricePerUnit * count).toFixed(2);
+            result[elem.name]["price"] = generalPrice[elem.name];
             if(elem.hasWeight){
                 result[elem.name]["weight"] = generalWeight[elem.name];
                 result[elem.name]["price"] = (elem.pricePerUnit * elem.weight).toFixed(2);
@@ -141,6 +144,7 @@ Template.listItems.events({
             product[name] = value;
         });
         product["_id"] = this.value._id;
+        product["boughtAt"] = new Date().yyyymmdd();
         Stock.insert(product, function(err, res){
             List.remove(id);
             jQuery(".popup").hide();
