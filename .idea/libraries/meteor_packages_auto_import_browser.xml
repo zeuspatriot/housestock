@@ -131,8 +131,6 @@
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.2/web.browser/utils.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.2/web.browser/heartbeat.js" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/diff-sequence/1.0.1/web.browser/diff.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/twbs_bootstrap/3.3.6/web.browser/dist/js/bootstrap.js" />
-        <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/twbs_bootstrap/3.3.6/web.browser/dist/css/bootstrap.css" />
         <item url="file://$USER_HOME$/AppData/Local/.meteor/packages/ecmascript-runtime/0.2.6/web.browser/.npm/package/node_modules/meteor-ecmascript-runtime/client.js" />
       </sourceFilesUrls>
     </properties>
@@ -266,8 +264,6 @@
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.2/web.browser/utils.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/ddp-common/1.2.2/web.browser/heartbeat.js" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/diff-sequence/1.0.1/web.browser/diff.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/twbs_bootstrap/3.3.6/web.browser/dist/js/bootstrap.js" />
-      <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/twbs_bootstrap/3.3.6/web.browser/dist/css/bootstrap.css" />
       <root url="file://$USER_HOME$/AppData/Local/.meteor/packages/ecmascript-runtime/0.2.6/web.browser/.npm/package/node_modules/meteor-ecmascript-runtime/client.js" />
     </CLASSES>
     <SOURCES />

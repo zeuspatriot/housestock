@@ -61,6 +61,7 @@ Template.addListItems.events({
         event.preventDefault();
         var productId = jQuery("#productToAdd").val();
         var product = Products.findOne(productId);
+        product["_prodId"] = product._id;
         delete product["_id"];
         var amount = jQuery("input#amount").val()*1;
         if (product.hasWeight){
@@ -113,7 +114,7 @@ Template.listItems.helpers({
             result[elem.name]["price"] = generalPrice[elem.name];
             if(elem.hasWeight){
                 result[elem.name]["weight"] = generalWeight[elem.name];
-                result[elem.name]["price"] = (elem.pricePerUnit * elem.weight).toFixed(2);
+                result[elem.name]["price"] = Math.round((elem.pricePerUnit * elem.weight)*100)/100;
             }
         });
         return _.map(result, function(val,key){return {name: key, value: val}});
@@ -127,9 +128,9 @@ Template.listItems.events({
         jQuery(".toStock#"+this.value._id).show();
         jQuery(".greyout").show();
     },
-    "submit .approve": function(event){
+    "submit .transferToStockSubmit": function(event){
         event.preventDefault();
-        var product = {};
+        var product = this.value;
         var id = this.value._id;
         jQuery(event.target).find('input').each(function(){
             var field = jQuery(this);
@@ -143,7 +144,9 @@ Template.listItems.events({
             }
             product[name] = value;
         });
-        product["_id"] = this.value._id;
+        if(product.hasWeight){
+            product["pricePerUnit"] = Math.round((product["pricePerUnit"] * product["weight"])*100) / 100;
+        }
         product["boughtAt"] = new Date().yyyymmdd();
         Stock.insert(product, function(err, res){
             List.remove(id);

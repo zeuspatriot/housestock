@@ -1,5 +1,5 @@
 <template name="listPage">
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default hidden-print">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -22,7 +22,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-12">
-                <div class="row">
+                <div class="row hidden-print">
                     <div class="col-md-12">
                         <h3>Add product to shopping list</h3>
                         {{>addListItems}}
@@ -69,7 +69,7 @@
     <select name="product" id="productToAdd" class="form-control">
         <option value="none">empty</option>
         {{#each products}}
-            <option value="{{_id}}" style="{{#unless like}}background-color: crimson{{/unless}}">{{name}}{{#if units}} x{{units}}{{/if}} {{brand}} {{shop}}</option>
+            <option value="{{_id}}" class="{{#unless like}}bg-danger{{/unless}}">{{name}} {{brand}} {{shop}}</option>
         {{/each}}
     </select>
     <table class="table table-striped">
@@ -116,10 +116,10 @@
             <th>Brand</th>
             <th>Shop</th>
             <th>Price per Unit</th>
-            <th>Amount</th>
+            <th>Amount / weight</th>
             <th>Price</th>
-            <th>To Stock</th>
-            <th>Remove</th>
+            <th class="hidden-print">To Stock</th>
+            <th class="hidden-print">Remove</th>
         </tr>
         </thead>
         <tbody>
@@ -131,20 +131,20 @@
                     <td>{{value.brand}} {{#if value.dislikedBrands}}(But not {{value.dislikedBrands}}){{/if}}</td>
                     <td>{{value.shop}}</td>
                     <td>{{value.pricePerUnit}}</td>
-                    <td>x {{value.amount}}</td>
+                    <td>x {{#if value.hasWeight}} {{value.weight}} kg{{/if}}{{#unless value.hasWeight}}{{value.amount}}{{/unless}}</td>
                     <td>{{value.price}}</td>
-                    <td><button class="btn btn-default transferToStock" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
-                    <td><button class="btn btn-default remove"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                    <td class="hidden-print"><button class="btn btn-default transferToStock" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
+                    <td class="hidden-print"><button class="btn btn-default remove"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                 </tr>
             {{/unless}}
         {{/each}}
         </tbody>
     </table>
     {{#each items}}
-        <div class="panel panel-default popup toStock" id="{{value._id}}" style="bottom: 0">
+        <div class="panel panel-default popup toStock" id="{{value._id}}">
             <div class="panel-heading">Panel heading without title</div>
             <div class="panel-body">
-                <form class="approve">
+                <form class="transferToStockSubmit">
                     <div class="form-group">
                         <label for="name">Product name</label>
                         <input type="text" name="name" required id="name" class="form-control"  placeholder="product name" value="{{value.name}}" />
@@ -157,10 +157,18 @@
                         <label for="category">Category</label>
                         <input type="text" name="category" id="category" class="form-control" placeholder="product Category" value="{{value.category}}" />
                     </div>
+                    {{#if value.hasWeight}}
+                        <div class="form-group">
+                            <label for="weight">Weight of your purchase</label>
+                            <input type="number" step="0.001" name="weight" id="weight" class="form-control"  value="{{value.weight}}" />
+                        </div>
+                    {{/if}}
+                    {{#unless value.hasWeight}}
                     <div class="form-group">
                         <label for="units">Units</label>
                         <input type="number" name="units" id="units" class="form-control" step="0.001" placeholder="units or weight in kilos" value="{{value.units}}" />
                     </div>
+                    {{/unless}}
                     <div class="form-group">
                         <label for="brand">Brand</label>
                         <input type="text" name="brand" id="brand" class="form-control" placeholder="product Brand" value="{{value.brand}}"/>
@@ -170,7 +178,7 @@
                         <input type="text" name="shop" id="shop" class="form-control" placeholder="Shop product bought in" value="{{value.shop}}" />
                     </div>
                     <div class="form-group">
-                        <label for="expire">Shop where this product is sold</label>
+                        <label for="expire">What is Expiry date?</label>
                         <input type="date" name="expire" id="expire" class="form-control"  value="{{value.expire}}" />
                     </div>
                     <div class="checkbox">
@@ -191,4 +199,5 @@
             </div>
         </div>
     {{/each}}
+
 </template>

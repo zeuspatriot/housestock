@@ -50,7 +50,7 @@
                                     <td>{{value.name}}{{#if value.units}}, {{value.units}}{{/if}}</td>
                                     <td>{{value.brand}}</td>
                                     <td>{{value.shop}}</td>
-                                    <td>x {{value.amount}}</td>
+                                    <td>x {{#if value.hasWeight}} {{value.weight}} kg{{/if}}{{#unless value.hasWeight}}{{value.amount}}{{/unless}}</td>
                                     <td>{{value.price}} pln</td>
                                     <td>{{value.boughtAt}}</td>
                                     <td>{{value.expire}}</td>

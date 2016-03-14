@@ -15,7 +15,7 @@ div.popup{
     right: 0;
     top: 0;
     width: 400px;
-    height: 635px;
+    height: auto;
     display: none;
     margin-bottom: 50px;
     /*background-color: whitesmoke;*/
@@ -40,10 +40,4 @@ div.greyout{
 .total{
     font-size: 20px;
     margin-bottom: 50px;
-}
-.toStock{
-    height: 685px!important;
-}
-.editInStock{
-    height: 700px!important;
 }

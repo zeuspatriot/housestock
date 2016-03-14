@@ -22,12 +22,13 @@ Template.stock.helpers({
             var count = Stock.find({name:elem.name, usedAt:{$exists: false}, expiredAt: {$exists: false} }).count();
             result[elem.name]["amount"] = count;
             generalPrice[elem.name] += elem.pricePerUnit;
-            result[elem.name]["price"] = generalPrice[elem.name];
+            result[elem.name]["price"] = Math.round(generalPrice[elem.name]*100)/100;
             if(elem.hasWeight){
-                result[elem.name]["weight"] = generalWeight[elem.name];
-                result[elem.name]["price"] = elem.pricePerUnit * elem.weight;
+                result[elem.name]["weight"] = Math.round(generalWeight[elem.name]*100)/100;
+                //result[elem.name]["price"] = (elem.pricePerUnit * elem.weight).toFixed(2);
             }
         });
+
         return _.map(result, function(val,key){return {name: key, value: val}});
     },
     "usedItems": function(){
