@@ -65,7 +65,7 @@ Template.productItems.events({
             if (field.attr("type") == "number"){
                 value = value * 1;
             }
-            product[name] = value;
+            product[name] = typeof(value) == 'string' ? value.toLowerCase() : value;
         });
         Products.update(this._id, product, function(err, resp){
             jQuery(".popup").css("display","none");

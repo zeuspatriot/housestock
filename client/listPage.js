@@ -59,20 +59,34 @@ Template.addListItems.events({
     },
     "submit .addToList": function(event){
         event.preventDefault();
-        var productId = jQuery("#productToAdd").val();
-        var product = Products.findOne(productId);
-        product["_prodId"] = product._id;
-        delete product["_id"];
-        var amount = jQuery("input#amount").val()*1;
-        if (product.hasWeight){
-            product['weight'] = amount;
-            amount = 1;
+        var product = {
+            likedBrands: [],
+            dislikedBrands: []
+        };
+        jQuery(event.target).find('input').each(function(){
+            var field = jQuery(this);
+            var name = field.attr("name");
+            var value = field.val();
+            if (field.attr("type") == "number"){
+                value = value * 1;
+            }
+            product[name] = typeof(value) == 'string' ? value.toLowerCase() : value;
+        });
+        if(jQuery("th input#weight")[0].checked){
+            product["weight"] = product.amount;
+            product["amount"] = 1;
         }
+        //console.log(event.target.name.value);
+        var disliked = Products.find({name: event.target.name.value.toLowerCase()});
+        disliked.forEach(function(item){
+            item.like ?
+                product.likedBrands.push(item.brand) :
+                product.dislikedBrands.push(item.brand);
+        });
 
-        for (var i = 0; i<amount; i++){
-            List.insert(product, function(error, result){});
-        }
-        jQuery("input#amount").val("");
+        List.insert(product, function(error, result){});
+
+        jQuery(event.target).find('input').val("");
     },
     "click #addProduct": function(){
         jQuery(".popup#addProduct").css("display","block");
@@ -92,40 +106,28 @@ Template.addListItems.helpers({
 });
 Template.listItems.helpers({
     "items": function(){
-        var items = List.find({},{sort:{category:1}});
-        var result = {};
-        //console.log(items);
-        var generalWeight = {};
-        var generalPrice = {};
-        items.forEach(function(elem){
-            var disliked = Products.find({name: elem.name, like:false},{brand:1});
-            var dislikedBrands = [];
-            disliked.forEach(function(item){
-               dislikedBrands.push(item.brand);
-            });
-            result[elem.name] = elem;
-            result[elem.name]["dislikedBrands"] = dislikedBrands;
-            generalWeight[elem.name] ? null : generalWeight[elem.name] = 0;
-            generalPrice[elem.name] ? null : generalPrice[elem.name] = 0;
-            if(elem.hasWeight) generalWeight[elem.name] += elem.weight;
-            generalPrice[elem.name] += elem.pricePerUnit
-            var count = List.find({name:elem.name}).count();
-            result[elem.name]["amount"] = count;
-            result[elem.name]["price"] = generalPrice[elem.name];
-            if(elem.hasWeight){
-                result[elem.name]["weight"] = generalWeight[elem.name];
-                result[elem.name]["price"] = Math.round((elem.pricePerUnit * elem.weight)*100)/100;
-            }
-        });
-        return _.map(result, function(val,key){return {name: key, value: val}});
+        var items = List.find({});
+        //items.forEach(function(item){
+        //    item['likedBrands'] = [];
+        //    item['dislikedBrands'] = [];
+        //    var products = Products.find({name: item.name});
+        //        products.forEach(function(prod){
+        //            prod.like ?
+        //                List.update(item._id,{$set:{likedBrands: prod.brand}})
+        //                :
+        //                List.update(item._id,{$set:{dislikedBrands: prod.brand}})
+        //        })
+        //});
+        console.log(items.fetch());
+        return items;
     }
 });
 Template.listItems.events({
     "click .remove": function(){
-        List.remove(this.value._id);
+        List.remove(this._id);
     },
     "click .transferToStock": function(event){
-        jQuery(".toStock#"+this.value._id).show();
+        jQuery(".toStock#"+this._id).show();
         jQuery(".greyout").show();
     },
     "submit .transferToStockSubmit": function(event){

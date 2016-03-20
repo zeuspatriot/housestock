@@ -24,18 +24,18 @@
             <div class="col-xs-12 col-md-12">
                 <div class="row hidden-print">
                     <div class="col-md-12">
-                        <h3>Add product to shopping list</h3>
+                        <h3>Добавить товар в список покупок</h3>
                         {{>addListItems}}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-9">
-                        <h2>Shopping List:</h2>
+                        <h2>Список покупок:</h2>
                         {{>listItems}}
-                        <span class="label label-primary total floatRight">Total price = {{total}}</span>
+                        <!--<span class="label label-primary total floatRight">Total price = {{total}}</span>-->
                     </div>
                     <div class="col-md-3">
-                        <h2>You already have in stock:</h2>
+                        <h2>У вас уже имеются:</h2>
 
                         <ul class="list-group">
                             {{#each stockItems}}
@@ -66,136 +66,156 @@
 
 </template>
 <template name="addListItems">
-    <select name="product" id="productToAdd" class="form-control">
-        <option value="none">empty</option>
-        {{#each products}}
-            <option value="{{_id}}" class="{{#unless like}}bg-danger{{/unless}}">{{name}} {{brand}} {{shop}}</option>
-        {{/each}}
-    </select>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Brand</th>
-            <th>Name</th>
-            <th>Shop</th>
-            <th>Price</th>
-            <th>Category</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#with currProduct}}
+    <!--<select name="product" id="productToAdd" class="form-control">-->
+        <!--<option value="none">empty</option>-->
+        <!--{{#each products}}-->
+            <!--<option value="{{_id}}" class="{{#unless like}}bg-danger{{/unless}}">{{name}} {{brand}} {{shop}}</option>-->
+        <!--{{/each}}-->
+    <!--</select>-->
+    <form class="addToList">
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td>{{brand}}</td>
-                <td>{{name}}</td>
-                <td>{{shop}}</td>
-                <td>{{pricePerUnit}}</td>
-                <td>{{category}}</td>
+                <th>Имя</th>
+                <th>Количество в пачке</th>
+                <th>Категория</th>
+                <th>
+                    <label>
+                        <input type="checkbox" name="weight" id="weight" title="weight"/>
+                        Вес (нажать, если товар развесной)
+                    </label>
+                    <br>
+                    Количество пачек
+                </th>
+                <th>Add to List</th>
             </tr>
-        {{/with}}
-        </tbody>
-    </table>
-    {{#with currProduct}}
-        <form class="addToList">
-            <div class="input-group col-md-6">
-                    <input type="number" step="0.001" id="amount" placeholder="How many?" class="form-control" />
-                    <span class="input-group-btn">
-                       <button class="btn btn-primary" type="submit">Add to list</button>
-                    </span>
-            </div>
-        </form>
-        <button class="btn btn-primary floatRight" id="addProduct">Create product</button>
-    {{/with}}
+            </thead>
+            <tbody>
+            <!--{{#with currProduct}}-->
+                <!--<tr>-->
+                    <!--<td>{{brand}}</td>-->
+                    <!--<td>{{name}}</td>-->
+                    <!--<td>{{shop}}</td>-->
+                    <!--<td>{{pricePerUnit}}</td>-->
+                    <!--<td>{{category}}</td>-->
+                <!--</tr>-->
+            <!--{{/with}}-->
+            <tr>
+                <td>
+                    <input type="text" name="name" required id="name" class="form-control"  placeholder="product name" value="{{value.name}}" />
+                </td>
+                <td>
+                    <input type="number" name="units" id="units" class="form-control" step="0.001" placeholder="units or weight in kilos" value="{{value.units}}" />
+                </td>
+                <td>
+                    <input type="text" name="category" id="category" class="form-control" placeholder="product Category" value="{{value.category}}" />
+                </td>
+                <td>
+                    <input type="number" step="0.001" min="0" name="amount" id="amount" placeholder="How many?" class="form-control" />
+                </td>
+                <td>
+                    <button class="btn btn-primary" type="submit">Add to list</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+        <!--<button class="btn btn-primary floatRight" id="addProduct">Create product</button>-->
 </template>
 
 <template name="listItems">
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Category</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Shop</th>
-            <th>Price per Unit</th>
-            <th>Amount / weight</th>
-            <th>Price</th>
-            <th class="hidden-print">To Stock</th>
-            <th class="hidden-print">Remove</th>
+            <th>Категория</th>
+            <th>Имя</th>
+            <th>Любимые Бренды</th>
+            <th>Не брать эти Бренды</th>
+            <!--<th>Shop</th>-->
+            <!--<th>Price per Unit/Kilo</th>-->
+            <th>Количество / Вес</th>
+            <!--<th>Price</th>-->
+            <th class="hidden-print">В Сток</th>
+            <th class="hidden-print">Удалить</th>
         </tr>
         </thead>
         <tbody>
         {{#each items}}
-            {{#unless edit}}
-                <tr>
-                    <td>{{value.category}}</td>
-                    <td>{{value.name}}{{#if value.units}}, {{value.units}}{{/if}}</td>
-                    <td>{{value.brand}} {{#if value.dislikedBrands}}(But not {{value.dislikedBrands}}){{/if}}</td>
-                    <td>{{value.shop}}</td>
-                    <td>{{value.pricePerUnit}}</td>
-                    <td>x {{#if value.hasWeight}} {{value.weight}} kg{{/if}}{{#unless value.hasWeight}}{{value.amount}}{{/unless}}</td>
-                    <td>{{value.price}}</td>
-                    <td class="hidden-print"><button class="btn btn-default transferToStock" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
-                    <td class="hidden-print"><button class="btn btn-default remove"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
-                </tr>
-            {{/unless}}
+            <tr>
+                <td>{{category}}</td>
+                <td>{{name}}{{#if units}}, {{units}}{{/if}}</td>
+                <td><p class="bg-success">{{likedBrands}}</p></td>
+                <td><p class="bg-danger">{{dislikedBrands}}</p></td>
+                <!--<td>{{pricePerUnit}} zl</td>-->
+                <td>x {{#if weight}} {{weight}} kg{{/if}}{{#unless weight}}{{amount}}{{/unless}}</td>
+                <!--<td>{{price}}</td>-->
+                <td class="hidden-print"><button class="btn btn-default transferToStock" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
+                <td class="hidden-print"><button class="btn btn-default remove"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+            </tr>
         {{/each}}
         </tbody>
     </table>
     {{#each items}}
-        <div class="panel panel-default popup toStock" id="{{value._id}}">
+        <div class="panel panel-default popup toStock" id="{{_id}}">
             <div class="panel-heading">Panel heading without title</div>
-            <div class="panel-body">
-                <form class="transferToStockSubmit">
-                    <div class="form-group">
-                        <label for="name">Product name</label>
-                        <input type="text" name="name" required id="name" class="form-control"  placeholder="product name" value="{{value.name}}" />
-                    </div>
-                    <div class="form-group">
-                        <label for="pricePerUnit">Price per Unit</label>
-                        <input type="number" name="pricePerUnit" id="pricePerUnit" class="form-control" step="0.01" placeholder="price per unit" value="{{value.pricePerUnit}}" />
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Category</label>
-                        <input type="text" name="category" id="category" class="form-control" placeholder="product Category" value="{{value.category}}" />
-                    </div>
-                    {{#if value.hasWeight}}
+            <div class="panel-body row">
+                <div class="col-md-12">
+                    <form class="transferToStockSubmit">
                         <div class="form-group">
-                            <label for="weight">Weight of your purchase</label>
-                            <input type="number" step="0.001" name="weight" id="weight" class="form-control"  value="{{value.weight}}" />
+                            <label for="name">Product name</label>
+                            <input type="text" name="name" required id="name" class="form-control"  placeholder="product name" value="{{name}}" />
                         </div>
-                    {{/if}}
-                    {{#unless value.hasWeight}}
-                    <div class="form-group">
-                        <label for="units">Units</label>
-                        <input type="number" name="units" id="units" class="form-control" step="0.001" placeholder="units or weight in kilos" value="{{value.units}}" />
-                    </div>
-                    {{/unless}}
-                    <div class="form-group">
-                        <label for="brand">Brand</label>
-                        <input type="text" name="brand" id="brand" class="form-control" placeholder="product Brand" value="{{value.brand}}"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="shop">Shop where this product is sold</label>
-                        <input type="text" name="shop" id="shop" class="form-control" placeholder="Shop product bought in" value="{{value.shop}}" />
-                    </div>
-                    <div class="form-group">
-                        <label for="expire">What is Expiry date?</label>
-                        <input type="date" name="expire" id="expire" class="form-control"  value="{{value.expire}}" />
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="like" id="like" title="like" checked="{{value.like}}" />
-                            Like this product?
-                        </label>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="hasWeight" id="hasWeight" title="Weight" checked="{{value.hasWeight}}">
-                            Does this a bulk product?
-                        </label>
-                    </div>
-                    <button class="btn btn-warning" id="toStockCancel" type="button">Cancel</button>
-                    <button type="submit" class="btn btn-primary floatRight">Transfer to Stock</button>
-                </form>
+                        <div class="form-group">
+                            <label for="pricePerUnit">Price per Unit/Kilo</label>
+                            <input type="number" name="pricePerUnit" id="pricePerUnit" class="form-control" step="0.01" placeholder="price per unit" value="{{pricePerUnit}}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <input type="text" name="category" id="category" class="form-control" placeholder="product Category" value="{{category}}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight of your purchase (if any)</label>
+                            <input type="number" step="0.001" name="weight" id="weight" class="form-control"  value="{{weight}}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="units">Units/weight in Pack (if any)</label>
+                            <input type="number" name="units" id="units" class="form-control" step="0.001" placeholder="units or weight in kilos" value="{{units}}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="brand">Brand</label>
+                            <input type="text" name="brand" id="brand" class="form-control" placeholder="product Brand" value="{{brand}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="shop">Shop where this product was sold</label>
+                            <input type="text" name="shop" id="shop" class="form-control" placeholder="Shop product bought in" value="{{shop}}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="expire">What is Expiry date?</label>
+                            <input type="date" name="expire" id="expire" class="form-control"  value="{{expire}}" />
+                        </div>
+                        <div class="form-group {{#if weight}}hidden{{/if}}">
+                            <label for="amount">Amount</label>
+                            <input type="number" name="amount" required id="amount" class="form-control"  placeholder="product name" value="{{amount}}" />
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="like" id="like" title="like" checked="{{like}}" />
+                                Like this product?
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="hasWeight" id="hasWeight" title="Weight" checked="{{hasWeight}}">
+                                Does this a bulk product?
+                            </label>
+                        </div>
+                        <button class="btn btn-warning" id="toStockCancel" type="button">Cancel</button>
+                        <button type="submit" class="btn btn-primary floatRight">Transfer to Stock</button>
+                    </form>
+                </div>
+                <!--<div class="col-md-8">-->
+                    <!--{{>productItems}}-->
+                <!--</div>-->
             </div>
         </div>
     {{/each}}
