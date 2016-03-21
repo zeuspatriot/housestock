@@ -18,14 +18,14 @@ Template.stock.helpers({
             result[elem.name] = elem;
             generalWeight[elem.name] ? null : generalWeight[elem.name] = 0;
             generalPrice[elem.name] ? null : generalPrice[elem.name] = 0;
-            if(elem.hasWeight) generalWeight[elem.name] += elem.weight;
+            if(elem.weight) generalWeight[elem.name] += elem.weight;
             var count = Stock.find({name:elem.name, usedAt:{$exists: false}, expiredAt: {$exists: false} }).count();
             result[elem.name]["amount"] = count;
             generalPrice[elem.name] += elem.pricePerUnit;
             result[elem.name]["price"] = Math.round(generalPrice[elem.name]*100)/100;
-            if(elem.hasWeight){
+            if(elem.weight){
                 result[elem.name]["weight"] = Math.round(generalWeight[elem.name]*100)/100;
-                //result[elem.name]["price"] = (elem.pricePerUnit * elem.weight).toFixed(2);
+                result[elem.name]["price"] = Math.round((elem.pricePerUnit * elem.weight)*100)/100;
             }
         });
 

@@ -1,3 +1,11 @@
+function stockPromiseInsert (product){
+    return new Promise(function(resolve, reject){
+        Stock.insert(product, function(err,res){
+            resolve(this);
+        })
+    })
+}
+
 Template.listPage.helpers({
     "products": function(){
         return Products.find({},{sort: {like: 1}});
@@ -107,18 +115,6 @@ Template.addListItems.helpers({
 Template.listItems.helpers({
     "items": function(){
         var items = List.find({});
-        //items.forEach(function(item){
-        //    item['likedBrands'] = [];
-        //    item['dislikedBrands'] = [];
-        //    var products = Products.find({name: item.name});
-        //        products.forEach(function(prod){
-        //            prod.like ?
-        //                List.update(item._id,{$set:{likedBrands: prod.brand}})
-        //                :
-        //                List.update(item._id,{$set:{dislikedBrands: prod.brand}})
-        //        })
-        //});
-        console.log(items.fetch());
         return items;
     }
 });
@@ -132,8 +128,9 @@ Template.listItems.events({
     },
     "submit .transferToStockSubmit": function(event){
         event.preventDefault();
-        var product = this.value;
-        var id = this.value._id;
+        var product = this;
+        var id = this._id;
+        delete product._id;
         jQuery(event.target).find('input').each(function(){
             var field = jQuery(this);
             var name = field.attr("name");
@@ -146,15 +143,30 @@ Template.listItems.events({
             }
             product[name] = value;
         });
-        if(product.hasWeight){
-            product["pricePerUnit"] = Math.round((product["pricePerUnit"] * product["weight"])*100) / 100;
-        }
         product["boughtAt"] = new Date().yyyymmdd();
-        Stock.insert(product, function(err, res){
-            List.remove(id);
+        for (var i= 0; i<product.amount;i++){
+            stockPromiseInsert(product)
+                .then(function(){
+                    List.remove(id);
+                    var equalProduct = Products.find(
+                        {
+                            name: product.name,
+                            brand: product.brand,
+                            shop: product.shop,
+                            units: product.units
+                        });
+                    if(equalProduct.count() === 0){
+                        Products.insert(product);
+                    }
+                    else{
+                        Products.update(equalProduct.fetch()[0]._id,{$set:product});
+                    }
+                });
+
             jQuery(".popup").hide();
             jQuery(".greyout").hide();
-        });
+            jQuery(".popup .toStock #"+id).remove();
+        }
     },
     "click #toStockCancel":function(){
         jQuery(".popup").hide();
