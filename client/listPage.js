@@ -71,7 +71,7 @@ Template.addListItems.events({
             likedBrands: [],
             dislikedBrands: []
         };
-        jQuery(event.target).find('input').each(function(){
+        jQuery(event.target).find('td input').each(function(){
             var field = jQuery(this);
             var name = field.attr("name");
             var value = field.val();

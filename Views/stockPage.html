@@ -32,15 +32,15 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Category</th>
-                            <th>Name</th>
-                            <th>Brand</th>
-                            <th>Shop</th>
-                            <th>Amount</th>
-                            <th>Paid</th>
-                            <th>Bought at</th>
-                            <th>Expires at</th>
-                            <th>Controls</th>
+                            <th>Категория</th>
+                            <th>Имя</th>
+                            <th>Бренд</th>
+                            <th>Магазин</th>
+                            <th>Количество\Вес</th>
+                            <th>Стоимость</th>
+                            <th>Дата покупки</th>
+                            <th>Срок годности</th>
+                            <th>Управление</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -50,7 +50,7 @@
                                     <td>{{value.name}}{{#if value.units}}, {{value.units}}{{/if}}</td>
                                     <td>{{value.brand}}</td>
                                     <td>{{value.shop}}</td>
-                                    <td>x {{#if value.hasWeight}} {{value.weight}} kg{{/if}}{{#unless value.hasWeight}}{{value.amount}}{{/unless}}</td>
+                                    <td>x {{#if value.weight}} {{value.weight}} kg{{/if}}{{#unless value.weight}}{{value.amount}}{{/unless}}</td>
                                     <td>{{value.price}} pln</td>
                                     <td>{{value.boughtAt}}</td>
                                     <td>{{value.expire}}</td>
@@ -68,14 +68,15 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>Category</th>
-                            <th>Name</th>
-                            <th>Brand</th>
-                            <th>Shop</th>
-                            <th>Paid</th>
-                            <th>Bought at</th>
-                            <th>Expires at</th>
-                            <th>Controls</th>
+                            <th>Категория</th>
+                            <th>Имя</th>
+                            <th>Бренд</th>
+                            <th>Магазин</th>
+                            <th>Вес</th>
+                            <th>Стоимость за Единицу\кг</th>
+                            <th>Дата покупки</th>
+                            <th>Срок годности</th>
+                            <th>Управление</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -85,7 +86,9 @@
                                 <td>{{name}}{{#if units}}, {{units}}{{/if}}</td>
                                 <td>{{brand}}</td>
                                 <td>{{shop}}</td>
-                                <td>{{pricePerUnit}} pln</td>
+                                <td>{{weight}}</td>
+                                <!--<td>{{pricePerUnit}} pln</td>-->
+                                <td>{{priceForWeightProducts pricePerUnit weight}} pln</td>
                                 <td>{{boughtAt}}</td>
                                 <td>{{expire}}</td>
                                 <td>
