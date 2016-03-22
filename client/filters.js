@@ -1,6 +1,8 @@
 function getDistinctClasses(collection,key) {
     if(!Session.get("filters")) Session.set("filters",{});
     var filters = Session.get("filters");
+    filters["usedAt"]= {$exists: false};
+    filters["expiredAt"] = {$exists: false};
     var data = collection.find(filters).fetch();
     var distinctData = _.uniq(data, false, function(d) {return d[key]});
     return _.pluck(distinctData, key);

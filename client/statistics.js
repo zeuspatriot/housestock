@@ -31,7 +31,11 @@ Template.statistics.helpers({
             }
 
         });
-        return _.map(result, function(val,key){return {name: key, value: val}});
+        var tmp = _.map(result, function(val,key){return {name: key, value: val}});
+        var final = _.sortBy(tmp, function(item){
+            return -item.value.spent
+        });
+        return final;
     },
     "totalPrice": function(){
         var items = Stock.find();

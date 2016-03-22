@@ -41,3 +41,6 @@ div.greyout{
     font-size: 20px;
     margin-bottom: 50px;
 }
+form.addToList input#category{
+    display: none;
+}

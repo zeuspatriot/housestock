@@ -73,6 +73,22 @@ Template.stock.events({
     },
     "click .used": function(event){
         Stock.update(this.value._id, {$set: {usedAt: new Date().yyyymmdd()}});
+        //Stock.find({}).forEach(function(elem){
+        //    Object.keys(elem).forEach(function(key){
+        //        if(key != "_id"){
+        //            typeof(elem[key]) == 'string' ? elem[key] = elem[key].toLowerCase() : elem[key];
+        //        }
+        //    });
+        //    Stock.update(elem._id, {$set:elem});
+        //});
+        //Products.find({}).forEach(function(elem){
+        //    Object.keys(elem).forEach(function(key){
+        //        if(key != "_id"){
+        //            typeof(elem[key]) == 'string' ? elem[key] = elem[key].toLowerCase() : elem[key];
+        //        }
+        //    });
+        //    Products.update(elem._id, {$set:elem});
+        //})
     },
     "click .expired": function(event){
         Stock.update(this.value._id, {$set: {expiredAt: new Date().yyyymmdd()}});

@@ -95,10 +95,22 @@ Template.addListItems.events({
         List.insert(product, function(error, result){});
 
         jQuery(event.target).find('input').val("");
+        jQuery("th input#weight").attr("checked",false);
+        jQuery("form.addToList button#catName span#text").text("Категория");
+        jQuery("form.addToList div.dropdown").show();
+        jQuery("form.addToList input#category").hide();
     },
     "click #addProduct": function(){
         jQuery(".popup#addProduct").css("display","block");
         jQuery(".greyout").css("display","block");
+    },
+    "click .cat": function(event){
+        jQuery("form.addToList input#category").val(event.target.text);
+        jQuery("form.addToList button#catName span#text").text(event.target.text);
+    },
+    "click #addAnother": function(){
+        jQuery("form.addToList input#category").show();
+        jQuery("form.addToList div.dropdown").hide();
     }
 });
 Template.addListItems.helpers({
@@ -110,6 +122,18 @@ Template.addListItems.helpers({
             ? Session.get("currProduct")
             : Products.findOne(jQuery("#productToAdd").val());
         return currentProduct;
+    },
+    "categories": function(){
+        var items = Stock.find({});
+        var listitems = List.find({});
+        var result = {};
+        items.forEach(function(item){
+            result[item.category] = true;
+        });
+        listitems.forEach(function(item){
+            result[item.category] = true;
+        });
+        return Object.keys(result);
     }
 });
 Template.listItems.helpers({

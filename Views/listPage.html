@@ -68,6 +68,20 @@
                     <input type="number" name="units" id="units" class="form-control" step="0.001" placeholder="units or weight in kilos" value="{{value.units}}" />
                 </td>
                 <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="catName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span id="text">Категория</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            {{#each categories}}
+                                <li class="cat"><a href="#">{{this}}</a></li>
+                            {{/each}}
+                            <li role="separator" class="divider"></li>
+                            <li id="addAnother"><a href="#">Add another</a></li>
+                        </ul>
+                    </div>
+
                     <input type="text" name="category" id="category" class="form-control" placeholder="product Category" value="{{value.category}}" />
                 </td>
                 <td>
