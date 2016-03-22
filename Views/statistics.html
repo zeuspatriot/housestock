@@ -1,0 +1,79 @@
+<template name="statistics">
+    <div class="container">
+        {{>navbarModule}}
+        <h3>Статистика затрат</h3>
+        <div class="row">
+            <div class="col-md-4">
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Магазин</th>
+                        <th>Затраты</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each statCount 'shop'}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{mathRoundPrice value.spent}} pln</td>
+                        </tr>
+                    {{/each}}
+                    <tr class="info">
+                        <td>Total</td>
+                        <td>{{mathRoundPrice totalPrice}} pln</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+
+                <table class="table table-striped col-md-4">
+                    <thead>
+                    <tr>
+                        <th>Категория</th>
+                        <th>Затраты</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each statCount 'category'}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{mathRoundPrice value.spent}} pln</td>
+                        </tr>
+                    {{/each}}
+                    <tr class="info">
+                        <td>Total</td>
+                        <td>{{mathRoundPrice totalPrice}} pln</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+
+                <table class="table table-striped col-md-4">
+                    <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Затраты</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each statCount 'name'}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{mathRoundPrice value.spent}} pln</td>
+                        </tr>
+                    {{/each}}
+                    <tr class="info">
+                        <td>Total</td>
+                        <td>{{mathRoundPrice totalPrice}} pln</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</template>

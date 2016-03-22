@@ -19,10 +19,10 @@ Template.listPage.helpers({
             items.forEach(function(elem){
                 result[elem.name] = elem;
                 generalWeight[elem.name] ? null : generalWeight[elem.name] = 0;
-                if(elem.hasWeight) generalWeight[elem.name] += elem.weight;
+                if(elem.weight) generalWeight[elem.name] += elem.weight;
                 var count = Stock.find({name:elem.name, usedAt:{$exists: false}, expiredAt: {$exists: false} }).count();
                 result[elem.name]["amount"] = count;
-                if(elem.hasWeight){
+                if(elem.weight){
                     result[elem.name]["weight"] = generalWeight[elem.name];
                     result[elem.name]["price"] = elem.pricePerUnit * elem.weight;
                 }
@@ -36,7 +36,7 @@ Template.listPage.helpers({
         var listItems = List.find({});
         var total = 0;
         listItems.forEach(function(item){
-            if(item.hasWeight){
+            if(item.weight){
                 total += item.pricePerUnit * item.weight;
             }
             else{

@@ -6,3 +6,7 @@ UI.registerHelper('priceForWeightProducts', function(pricePerUnit, weight){
         return pricePerUnit;
     }
 });
+
+UI.registerHelper("mathRoundPrice", function(price){
+    return Math.round(price*100)/100;
+});
